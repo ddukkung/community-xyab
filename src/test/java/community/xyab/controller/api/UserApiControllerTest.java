@@ -14,6 +14,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -33,6 +34,9 @@ public class UserApiControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @AfterEach
     void cleanup() throws Exception {
         userRepository.deleteAll();
@@ -46,13 +50,13 @@ public class UserApiControllerTest {
 
         UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
                 .username(username)
-                .password("1234")
+                .password(bCryptPasswordEncoder.encode("1234"))
                 .nickname(nickname)
                 .email("test@test.com")
                 .role(Role.USER)
                 .build();
 
-        String url = "http://localhost:" + port + "/api/v1/user";
+        String url = "http://localhost:" + port + "/auth/api/v1/user";
 
         // when
         ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, userSaveRequestDto, Long.class);

@@ -26,10 +26,15 @@ public class Board extends BaseTimeEntity {
     @Lob // 대용량 데이터를 저장할 때 사용
     private String content;
 
-    private int viewCnt;
+    private int count;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
 }

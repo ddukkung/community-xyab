@@ -6,6 +6,8 @@ import community.xyab.domain.user.User;
 import community.xyab.dto.board.BoardSaveRequestDto;
 import community.xyab.dto.board.BoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +27,9 @@ public class BoardService {
     }
 
     // 게시글 목록 조회
-    public List<Board> findAll() {
-        return boardRepository.findAll();
+    @Transactional(readOnly = true)
+    public Page<Board> findAll(Pageable pageable) {
+        return boardRepository.findAll(pageable);
     }
 
     // 게시글 상세 조회
@@ -53,5 +56,11 @@ public class BoardService {
     @Transactional
     public void updateCount(Long id) {
         boardRepository.updateCount(id);
+    }
+
+    // 게시글 검색
+    @Transactional(readOnly = true)
+    public Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable) {
+        return boardRepository.findByTitleContainingOrContentContaining(title, content, pageable);
     }
 }

@@ -4,51 +4,60 @@
 <body class="text-center d-flex flex-column h-100">
     <header th:replace="layout/header :: header"></header>
 
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">글번호</th>
+            <th scope="col">작성자</th>
+            <th scope="col">조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row" th:text="${board.id}" id="id"></th>
+            <td th:text="${board.user.username}"></td>
+            <td th:text="${board.count}"></td>
+        </tr>
+        </tbody>
+    </table>
+
     <main class="form-signin" style="max-width: 100%;">
-        <div class="container border rounded flex-md-row mb-4 shadow-sm h-md-250">
-            <h1 class="h3 m-3 fw-normal" th:text="${board.title}">글상세</h1>
 
-            <hr style="margin-bottom: 20px;">
-
-            <ul class="list-inline mb-2">
-                <li class="list-inline-item">
-                    <ul>
-                        <li class="list-inline-item">글번호 : </li>
-                        <li class="list-inline-item" th:text="${board.id}" id="id"></li>
-                    </ul>
-                </li>
-                <li class="list-inline-item">
-                    <ul>
-                        <li class="list-inline-item">작성자 : </li>
-                        <li class="list-inline-item" th:text="${board.user.username}"></li>
-                    </ul>
-                </li>
-                <li class="list-inline-item">
-                    <ul>
-                        <li class="list-inline-item">조회수 : </li>
-                        <li class="list-inline-item" th:text="${board.count}"></li>
-                    </ul>
-                </li>
-                <li class="list-inline-item">
-                    <ul>
-                        <li class="list-inline-item">작성일 : </li>
-                        <li class="list-inline-item" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="form-floating m-3">
-                <p th:text="${board.content}">글내용</p>
+        <div class="container">
+            <div class="page-header">
+                <h1>게시글 상세 조회</h1>
             </div>
+            <br>
+            <table class="table">
+                <tr>
+                    <th style="padding:13px 0 0 15px;">작성일</th>
+                    <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}" class="col-md-1 form-control input-sm"></td>
+                </tr>
+                <tr>
+                    <th style="padding:13px 0 0 15px;">제목</th>
+                    <td class="col-md-1 form-control input-sm" th:text="${board.title}"></td>
+                </tr>
+                <tr>
+                    <th style="padding:13px 0 0 15px;">내용</th>
+                    <td class="col-md-1 form-control input-sm" style="height: 200px;" th:text="${board.content}">
+                        <span class="help-block"></span>
+                    </td>
+                </tr>
+            </table>
+
             <div class="list-inline">
-                <div th:if="${board.user.id == #authentication.principal.id}">
-                    <a th:href="@{/board/{id}/update(id=${board.id})}" class="btn btn-warning" id="btn-update">수정</a>
-                    <button class="btn btn-danger" id="btn-delete">삭제</button>
+                <div class="text-lg-start">
+                    <a th:href="@{/}" class="btn btn-secondary">목록으로</a>
                 </div>
-                <button class="btn btn-secondary d-flex justify-content-start" th:onclick="|location.href='@{/}'|">목록으로</button>
+                <div class="gap-2 d-md-flex justify-content-md-end"
+                     th:if="${board.user.id == #authentication.principal.id}">
+                    <a th:href="@{/board/{id}/update(id=${board.id})}" class="btn btn-warning" id="btn-update">수정</a>
+                    <button type="button" class="w-20 btn btn-danger" id="btn-delete">삭제</button>
+                </div>
             </div>
 
             <!-- comment -->
-            <div class="card mb-2 mt-5">
+            <div class="card mb-2 mt-5" style="max-width: 800px;">
                 <div class="card-header bg-light">
                     <i class="fa fa-comment fa"></i> 댓글
                 </div>
@@ -69,10 +78,10 @@
                 <div class="card">
                     <div class="card-header">댓글</div>
                     <ul class="list-group" id="reply--box" th:each="reply : ${board.replyList}">
-                        <li th:id="'reply--' + ${reply.id}" class="list-group-item d-flex justify-content-center">
-                            <span class="text-monospace mr-1 me-1">작성자 : </span>
-                            <div class="text-monospace me-1" th:text="${reply.user.username}"> &nbsp;</div>
-                            <div th:text="${reply.content}" class="me-3"></div>
+                        <li th:id="'reply--' + ${reply.id}" class="list-group-item d-flex justify-content-between">
+                            <span class="text-monospace mr-1">작성자: </span>
+                            <div class="text-monospace" th:text="${reply.user.username}" style="margin-left:10px;"> &nbsp;</div>
+                            <div th:text="${reply.content}"></div>
                             <div class="d-flex">
                                 <span th:if="${reply.user.id == #authentication.principal.id}">
     <!--                                <button id="reply-btn-update" class="badge btn-warning">수정</button><span> | </span>-->

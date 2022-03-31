@@ -5,6 +5,7 @@ import community.xyab.dto.board.BoardSaveRequestDto;
 import community.xyab.dto.board.BoardUpdateRequestDto;
 import community.xyab.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ public class BoardApiController {
 
     // 게시글 작성
     @PostMapping("/api/v1/board")
+    @ResponseStatus(HttpStatus.CREATED)
     public Long save(@RequestBody BoardSaveRequestDto boardSaveRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         return boardService.save(boardSaveRequestDto, principalDetail.getUser());
     }

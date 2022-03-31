@@ -2,6 +2,7 @@ package community.xyab.controller.api;
 
 import community.xyab.config.auth.PrincipalDetail;
 import community.xyab.domain.reply.Reply;
+import community.xyab.dto.reply.ReplyUpdateRequestDto;
 import community.xyab.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,5 +22,10 @@ public class ReplyApiController {
     @DeleteMapping("/api/v1/board/{boardId}/reply/{replyId}")
     public void delete(@PathVariable Long replyId) {
         replyService.delete(replyId);
+    }
+
+    @PutMapping("/api/v1/board/{boardId}/reply/{replyId}")
+    public void update(@PathVariable Long replyId, @RequestBody ReplyUpdateRequestDto replyUpdateRequestDto) {
+        replyService.update(replyId, replyUpdateRequestDto);
     }
 }

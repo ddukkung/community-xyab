@@ -1,14 +1,12 @@
 <!doctype html>
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
 <head th:replace="layout/header :: head ('회원수정')"></head>
-
 <body class="text-center d-flex flex-column h-100">
 <header th:replace="layout/header :: header"></header>
 
 <main class="form-signin">
     <div class="container border rounded flex-md-row mb-4 shadow-sm h-md-250">
-        <form id="needs-validation" novalidate>
+        <form>
             <h1 class="h3 m-3 fw-normal">회원 정보 수정</h1>
             <input type="hidden" id="id" th:value="${#authentication.principal.id}">
             <div class="form-floating m-3">
@@ -56,7 +54,10 @@
                 </div>
             </div>
         </form>
-        <button class="w-100 btn btn-lg btn-success" id="btn-update">회원수정</button>
+        <div class="d-flex justify-content-center mb-3">
+            <button class="w-100 btn btn-success btn-sm me-1" id="btn-update">회원수정</button>
+            <button class="w-100 btn btn-danger btn-sm" id="btn-delete" th:onclick="|location.href='@{/user/delete}'|">회원탈퇴</button>
+        </div>
     </div>
 </main>
 

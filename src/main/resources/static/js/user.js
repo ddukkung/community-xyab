@@ -18,6 +18,9 @@ let index = {
                 this.update();
             }
         });
+        $("#btn-userDelete").on("click", () => {
+            this.userDelete();
+        });
     },
 
     save: function () {
@@ -57,6 +60,26 @@ let index = {
             dataType: "json"
         }).done(function (res) {
             alert("회원 정보 수정이 완료되었습니다.");
+            location.href = "/";
+        }).fail(function (err) {
+            alert(JSON.stringify(err));
+        });
+    },
+
+    userDelete: function () {
+        let data = {
+            id: $("#id").val(),
+            password: $("#password").val()
+        }
+
+        $.ajax({
+            type: "DELETE",
+            url: "/api/v1/user",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "text"
+        }).done(function (res) {
+            alert("회원 탈퇴가 완료되었습니다.");
             location.href = "/";
         }).fail(function (err) {
             alert(JSON.stringify(err));

@@ -1,12 +1,16 @@
 package community.xyab.domain.user;
 
 import community.xyab.domain.BaseTimeEntity;
+import community.xyab.domain.board.Board;
+import community.xyab.domain.reply.Reply;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -34,6 +38,14 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    // 회원 탈퇴 시 게시글 모두 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Board> boardList = new ArrayList<>();
+
+    // 회원 탈퇴 시 댓글 모두 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replyList = new ArrayList<>();
 
     // 비밀번호 암호화 메소드
     public void setPassword(String password) {

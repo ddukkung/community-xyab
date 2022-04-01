@@ -24,4 +24,9 @@ public class UserController {
         return "layout/user/user-update";
     }
 
+    // 회원 탈퇴
+    @GetMapping("/user/delete")
+    public String userDelete() {
+        return "layout/user/user-delete";
+    }
 }

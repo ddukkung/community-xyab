@@ -7,14 +7,14 @@
     <main class="form-signin" style="max-width: 100%;">
         <div class="container border rounded flex-md-row mb-4 shadow-sm h-md-250">
             <h1 class="h3 m-3 fw-normal" th:text="${board.title}">글상세</h1>
-
+            <input type="hidden" th:value="${board.id}" id="id">
             <hr style="margin-bottom: 20px;">
 
             <ul class="list-inline mb-2">
                 <li class="list-inline-item">
                     <ul>
                         <li class="list-inline-item">글번호 : </li>
-                        <li class="list-inline-item" th:text="${board.id}" id="id"></li>
+                        <li class="list-inline-item" th:text="${board.id}"></li>
                     </ul>
                 </li>
                 <li class="list-inline-item">

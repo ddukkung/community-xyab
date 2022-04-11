@@ -2,14 +2,12 @@ package community.xyab.controller.api;
 
 import community.xyab.config.auth.PrincipalDetail;
 import community.xyab.domain.user.User;
+import community.xyab.dto.user.UserDeleteRequestDto;
 import community.xyab.dto.user.UserSaveRequestDto;
 import community.xyab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,5 +25,11 @@ public class UserApiController {
     @PutMapping("/api/v1/user")
     public Long update(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         return userService.update(user, principalDetail);
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/api/v1/user")
+    public void delete(@RequestBody UserDeleteRequestDto userDeleteRequestDto) {
+        userService.delete(userDeleteRequestDto);
     }
 }

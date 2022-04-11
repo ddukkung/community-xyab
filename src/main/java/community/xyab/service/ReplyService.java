@@ -5,6 +5,7 @@ import community.xyab.domain.board.BoardRepository;
 import community.xyab.domain.reply.Reply;
 import community.xyab.domain.reply.ReplyRepository;
 import community.xyab.domain.user.User;
+import community.xyab.dto.reply.ReplyUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,5 +26,10 @@ public class ReplyService {
 
     public void delete(Long replyId) {
         replyRepository.deleteById(replyId);
+    }
+
+    public void update(Long replyId, ReplyUpdateRequestDto replyUpdateRequestDto) {
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id=" + replyId));
+        reply.update(replyUpdateRequestDto.getContent());
     }
 }

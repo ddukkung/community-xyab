@@ -11,9 +11,12 @@ let replyIndex = {
         let data = {
             content: $("#reply-content").val(),
         }
+
         let boardId = $("#boardId").val();
+
         console.log(data);
         console.log(boardId);
+
         $.ajax({
             type: "POST",
             url: `/api/v1/board/${boardId}/reply`,
@@ -39,7 +42,30 @@ let replyIndex = {
         }).fail(function (err) {
             alert(JSON.stringify(err));
         });
-    }
+    },
+
+    /*replyUpdate: function () {
+        let data = {
+            content: $("#reply-content").val(),
+        }
+
+        let boardId = $("#boardId").val();
+        let replyId = $("#replyId").val();
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/v1/board/${boardId}/reply/${replyId}`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "text"
+        }).done(function (res) {
+            alert("댓글 수정이 완료되었습니다.");
+            location.href = `/board/${boardId}`;
+       }).fail(function (err) {
+            alert(JSON.stringify(err));
+        });
+
+    }*/
 
 }
 replyIndex.init();

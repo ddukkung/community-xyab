@@ -40,25 +40,25 @@ public class PrincipalDetail implements UserDetails {
         return user.getUsername();
     }
 
-    // 계정이 만료되었는지 (true : 만료되지 않음)
+    // 계정이 만료되었는지
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // 계정이 잠겨있는지 (true : 잠겨있지 않음)
+    // 계정이 잠겨있는지
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // 패스워드가 만료되지 않았는지 (true : 만료되지 않음)
+    // 패스워드가 만료되지 않았는지
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // 계정이 활성화되어 있는지 (true : 활성화 됨)
+    // 계정이 활성화되어 있는지
     @Override
     public boolean isEnabled() {
         return true;

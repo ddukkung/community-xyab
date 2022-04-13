@@ -13,8 +13,8 @@
    * [개발 환경](#개발환경)
    * [실행 화면](#실행화면)
  * [구조 및 설계](#구조-및-설계)
-   * [DB 설계](#DB-설계)
-   * [API 설계](#API-설계)
+   * [DB 설계](#db-설계)
+   * [API 설계](#api-설계)
  * [마치며](#마치며)
    * [보완사항](#보완사항)
    * [후기](#후기)
@@ -130,12 +130,22 @@ XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원가입을 �
 <br>
 
 ## DB 설계
-![xyab_db](https://user-images.githubusercontent.com/88926356/163223202-938e57fb-de0b-411c-98b2-3233eba83ca0.png)
-![image](https://user-images.githubusercontent.com/88926356/163228227-3f648b79-0b1f-49d4-86a5-9db05c21db78.png)
-![image](https://user-images.githubusercontent.com/88926356/163228282-08a7ce9c-cec7-421a-a7b8-2164d34d1a2c.png)
-![image](https://user-images.githubusercontent.com/88926356/163228324-b898b4d7-ee00-4997-8759-eccfb947ff0b.png)
+
+![xyab_db](https://user-images.githubusercontent.com/88926356/163223202-938e57fb-de0b-411c-98b2-3233eba83ca0.png)  
+
+![image](https://user-images.githubusercontent.com/88926356/163228227-3f648b79-0b1f-49d4-86a5-9db05c21db78.png)  
+
+![image](https://user-images.githubusercontent.com/88926356/163228282-08a7ce9c-cec7-421a-a7b8-2164d34d1a2c.png)  
+
+![image](https://user-images.githubusercontent.com/88926356/163228324-b898b4d7-ee00-4997-8759-eccfb947ff0b.png)  
+
+<br>
 
 ## API 설계
-![image](https://user-images.githubusercontent.com/88926356/163233217-8b1049fb-c81c-4660-a778-cc8bc9997eea.png)
-![image](https://user-images.githubusercontent.com/88926356/163233291-627308da-1f4e-4e35-9627-8676c2ef5423.png)
-![image](https://user-images.githubusercontent.com/88926356/163233332-8ffe31b2-793e-4cd0-bb93-2a7d12224d11.png)
+
+![image](https://user-images.githubusercontent.com/88926356/163233217-8b1049fb-c81c-4660-a778-cc8bc9997eea.png)  
+
+![image](https://user-images.githubusercontent.com/88926356/163233291-627308da-1f4e-4e35-9627-8676c2ef5423.png)  
+
+![image](https://user-images.githubusercontent.com/88926356/163233332-8ffe31b2-793e-4cd0-bb93-2a7d12224d11.png)  
+

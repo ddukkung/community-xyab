@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/");
 
         http
-                .rememberMe().tokenValiditySeconds(60 * 60 * 7)
+                .rememberMe().tokenValiditySeconds(60 * 60 * 24 * 7) // 토큰 유지 시간(초단위. 초 * 분 * 시 * 일) - 일주일
                 .userDetailsService(principalDetailService);
     }
 

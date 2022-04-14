@@ -13,7 +13,7 @@
                     <a th:href="@{/board/{id}(id=${board.id})}" class=".a-title">
                         <h3 class="mb-0 title" style="padding-bottom: 10px;" th:text="${board.title}">제목</h3>
                     </a>
-                    <div class="card-text mb-auto" th:text="${board.content}"></div>
+<!--                    <div class="card-text mb-auto" th:text="${board.content}"></div>-->
                     <div class="mb-1 text-muted" style="padding-top: 15px;" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}">날짜</div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item" th:classappend="${1 == boards.pageable.pageNumber + 1} ? 'disable' : '' ">
-                <a class="page-link" th:href="@{/(page=${boards.pageable.pageNumber - 1}, search=${param.search})}">Previous</a>
+                <a class="page-link" th:href="@{/(page=${boards.pageable.pageNumber - 1}, search=${param.search})}">Prev</a>
             </li>
             <li class="page-item" th:classappend="${i == boards.pageable.pageNumber + 1} ? 'active' : '' " th:each="i : ${#numbers.sequence(startPage, endPage)}">
                 <a class="page-link" th:href="@{/(page=${i - 1}, search=${param.search})}" th:text="${i}">1</a>

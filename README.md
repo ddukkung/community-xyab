@@ -28,9 +28,7 @@
 ## 4. 핵심 기능
 XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원 가입을 하여 자신의 글을 작성하거나 다른 사람의 글에 댓글을 남길 수 있습니다.  
 
-<details>
-<summary><b>핵심 기능 설명 펼치기</b></summary>
-<div markdown="1">
+<br>
 
 ### User   
 
@@ -48,9 +46,20 @@ XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원 가입을 �
 <br>
 
 ### 회원 탈퇴
-![user_delete](https://user-images.githubusercontent.com/88926356/162684150-ba03a070-17b1-42fc-9f9d-39abf4d5f183.gif)
-* 회원 정보 수정 페이지에서 회원 탈퇴 버튼 클릭 시 탈퇴 페이지로 이동
-* 입력된 비밀번호가 사용자의 비밀번호와 일치할 시 회원 탈퇴 진행   
+```java
+// 회원 탈퇴 시 게시글 모두 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Board> boardList = new ArrayList<>();
+
+    // 회원 탈퇴 시 댓글 모두 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replyList = new ArrayList<>();
+```
+* User 도메인의 boardList와 replyList는 OneToMany를, Board와 Reply의 user에는 ManyToOne를 주어 양방향 매핑 
+* boardList와 replyList에는 CascadeType.ALL, orphanRemoval = true 를 주어 유저가 회원 탈퇴할 시 해당 유저가 작성한 게시글과 댓글이 모두 삭제됨
+* service에서 입력받은 비밀번호가 DB에 저장된 비밀번호와 일치할 경우 회원 탈퇴 진행. 📌 [service](https://github.com/ddukkung/xyab/blob/2edc61d129af72fca78667a45786f220ab6c6d70/src/main/java/community/xyab/service/UserService.java#L40)
+  * BCryptPasswordEncoder의 matches() 메소드를 통해 입력받은 비밀번호를 해시코드로 변환시켜 비교
+  * `SecurityContextHolder.clearContext();`를 추가하여 로그아웃 처리
 
 <br>
 
@@ -59,6 +68,7 @@ XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원 가입을 �
 ![login_n_logout](https://user-images.githubusercontent.com/88926356/162684370-d59a02b8-84c6-4044-ac05-4bf402b97ded.gif)
 * 로그인 실패 시 실패 메시지를 출력하고 성공 시 메인 페이지로 이동
 * Remember-me 버튼을 클릭한 후 로그인할 경우 Spring Security 기능을 사용해 7일 간 자동 로그인 가능   
+
 
 <br>
 
@@ -96,14 +106,9 @@ XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원 가입을 �
 ![search](https://user-images.githubusercontent.com/88926356/162693181-febcb68f-8171-46c5-b333-f17f49e302c4.gif)
 * 키워드를 입력하여 검색 버튼 클릭 시 제목이나 내용에 해당 키워드가 포함된 게시글 목록을 조회할 수 있다.   
 
-</div>
-</details>
-  
 <br>
 
-## 5. 핵심 트러블 슈팅
-
-## 6. 회고 / 느낀점
+## 5. 회고 / 느낀점
 > 프로젝트 개발 회고록 : https://miree.tistory.com/135
 
 <br>

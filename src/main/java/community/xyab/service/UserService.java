@@ -37,6 +37,7 @@ public class UserService {
         return userEntity.getId();
     }
 
+    @Transactional
     public void delete(UserDeleteRequestDto userDeleteRequestDto) {
         User user = userRepository.findById(userDeleteRequestDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
 

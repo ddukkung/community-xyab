@@ -27,21 +27,40 @@
 
 ## 4. 핵심 기능
 XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원 가입을 하여 자신의 글을 작성하거나 다른 사람의 글에 댓글을 남길 수 있습니다.  
+  
+### 로직 (예시)
+```java
+컨트롤러단
+@PutMapping("/api/v1/user")
+public Long update(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    return userService.update(user, principalDetail);
+}
+
+서비스단
+@Transactional
+public Long update(User user, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    User userEntity = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다. id=" + user.getId()));
+    userEntity.update(encoder.encode(user.getPassword()), user.getNickname());
+    principalDetail.setUser(userEntity);
+    return userEntity.getId();
+}
+```
+* Spring MVC 패턴으로 구현했습니다.
+* 데이터 요청 및 응답에는 DTO 클래스를 만들어 사용하고, Service에서는 자동 커밋 및 데이터 정합성을 지키기 위해 @Transactional을 사용합니다.
 
 <br>
 
-### User   
-
-#### 회원가입
-![join](https://user-images.githubusercontent.com/88926356/162678606-0b5d8198-9fad-4f03-bf39-950f48a41e48.gif)
-* 부트스트랩의 validation을 사용해 사용자가 유효하지 않은 값으로 회원가입 진행 시 오류 메시지 출력
-* 완료 시 회원 정보를 저장하고 메인 화면으로 이동   
-
-<br>
-
-### 회원정보 수정
-![user_update](https://user-images.githubusercontent.com/88926356/162683862-a1d37f57-5c50-43f2-a959-77800d927adb.gif)
-* 자신의 비밀번호와 닉네임 변경 가능   
+### 회원 정보 수정
+```java
+@PutMapping("/api/v1/user")
+    public Long update(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        return userService.update(user, principalDetail);
+    }
+```
+* `@AuthenticationPrincipal`을 통해 로그인한 사용자의 정보를 받아와 UserService의 update() 메소드에 입력받은 비밀번호, 닉네임이 담긴 User 객체와 PrincipalDetail 객체를 넘겨줌
+* Service에서는 id로 User 테이블에서 조회하여 나온 유저 객체를 영속화 시킨다. 📌 [service](https://github.com/ddukkung/xyab/blob/33647187ad4904ec54aad3f4e25f1685f886dab1/src/main/java/community/xyab/service/UserService.java#L32)
+    * JPA를 사용하기 때문에 update 쿼리를 보내지 않아도 캐시에 있는 데이터의 변경이 감지되면 자동으로 update 된다. 그러므로 User 객체의 update() 메소드를 사용해 입력받은 데이터로 변경시킨다. 
+    * PrincipalDetail에도 setUser()를 하여 변경된 정보가 반영되도록 한다.
 
 <br>
 
@@ -63,47 +82,17 @@ XYAB는 닌텐도 스위치 유저를 위한 커뮤니티로, 회원 가입을 �
 
 <br>
 
-
-### 로그인 및 로그아웃
-![login_n_logout](https://user-images.githubusercontent.com/88926356/162684370-d59a02b8-84c6-4044-ac05-4bf402b97ded.gif)
-* 로그인 실패 시 실패 메시지를 출력하고 성공 시 메인 페이지로 이동
-* Remember-me 버튼을 클릭한 후 로그인할 경우 Spring Security 기능을 사용해 7일 간 자동 로그인 가능   
-
-
-<br>
-
-***
-
-## Board   
-
-### 게시글 CRUD
-![board_crud](https://user-images.githubusercontent.com/88926356/162692801-fe209682-e993-4eee-bda1-3383ec606e24.gif)
-* **게시글 상세보기** 
-  * 로그인한 사용자만 게시글 조회가 가능하며, 로그인하지 않았을 경우 로그인 페이지로 이동한다.
-  * Spring Security를 사용하여 본인이 작성한 글에만 수정, 삭제 버튼이 나타나도록 함
-* **게시글 작성**
-  * 로그인한 사용자만 작성 가능하며, 작성 후 게시글 목록으로 redirect한다.
-* **게시글 수정**
-  * 작성자 본인일 경우에만 수정 가능하다. 제목, 글 내용을 수정할 수 있으며 수정 후 게시글 목록으로 redirect한다.
-* **게시글 삭제**
-  * 작성자 본인일 경우에만 삭제 가능하며 삭제 후 게시글 목록으로 redirect한다.   
-
-<br>
-
 ### 페이지네이션
-![pagination](https://user-images.githubusercontent.com/88926356/162693125-b57ba955-e2fd-4654-920e-c799ad002105.gif)
 * JPA의 Pageable을 사용하여 페이징 처리   
 
 <br>
 
 ### 댓글 조회, 작성 및 삭제
-![comment](https://user-images.githubusercontent.com/88926356/162692952-19a94296-a804-4e52-828c-05f6da25178b.gif)
 * 상세 조회한 게시글에 댓글을 작성할 수 있으며 본인이 작성한 댓글의 경우에만 삭제 가능   
 
 <br>
 
 ### 검색
-![search](https://user-images.githubusercontent.com/88926356/162693181-febcb68f-8171-46c5-b333-f17f49e302c4.gif)
 * 키워드를 입력하여 검색 버튼 클릭 시 제목이나 내용에 해당 키워드가 포함된 게시글 목록을 조회할 수 있다.   
 
 <br>

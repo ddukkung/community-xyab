@@ -82,18 +82,60 @@ public Long update(User user, @AuthenticationPrincipal PrincipalDetail principal
 
 <br>
 
-### 페이지네이션
-* JPA의 Pageable을 사용하여 페이징 처리   
+### 페이지네이션, 검색
+```java
+@GetMapping("/")
+public String index(Model model,
+                    @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                    @RequestParam(required = false, defaultValue = "")String search) {
+    Page<Board> boards = boardService.findByTitleContainingOrContentContaining(search, search, pageable);
 
-<br>
+    int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
+    int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);
 
-### 댓글 조회, 작성 및 삭제
-* 상세 조회한 게시글에 댓글을 작성할 수 있으며 본인이 작성한 댓글의 경우에만 삭제 가능   
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
+    model.addAttribute("boards", boards);
 
-<br>
+    return "index";
+}
+```
+* JPA의 `Pageable` 이용
+* `@PageableDefault`를 통해 페이지의 size와 정렬방식, 정렬 기준을 정한다. 한 페이지에 5개씩, 최신 글이 먼저 보이도록 내림차순으로 정렬한다.
+* 검색은 url 뒤에 쿼리 파라미터로 검색어가 붙어서 오기 때문에 `@RequestParam`으로 받는다. required = false 로 검색어가 입력되지 않아도 괜찮도록 처리. defaultValue를 ""로 하여 검색어가 입력되지 않으면 search의 값은 ""이 된다.
+* `findByTitleContainingOrContentContaining`은 JPA에서 containing은 무엇을 포함한다는 LIKE문과 같으므로, 검색어가 title이나 content에 존재하는지 조회한다.
 
-### 검색
-* 키워드를 입력하여 검색 버튼 클릭 시 제목이나 내용에 해당 키워드가 포함된 게시글 목록을 조회할 수 있다.   
+```java
+<!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item" th:classappend="${1 == boards.pageable.pageNumber + 1} ? 'disable' : '' ">
+            <a class="page-link" th:href="@{/(page=${boards.pageable.pageNumber - 1}, search=${param.search})}">Prev</a>
+        </li>
+        <li class="page-item" th:classappend="${i == boards.pageable.pageNumber + 1} ? 'active' : '' " th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a class="page-link" th:href="@{/(page=${i - 1}, search=${param.search})}" th:text="${i}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${boards.totalPages == boards.pageable.pageNumber + 1} ? 'disable' : '' ">
+            <a class="page-link" th:href="@{/(page=${boards.pageable.pageNumber + 1}, search=${param.search})}">Next</a>
+        </li>
+    </ul>
+</nav>
+```
+* 뷰페이지는 Thymeleaf를 사용했다.
+* th:classappend를 사용해 조건에 맞을 경우 동적으로 클래스에 disable or active가 추가되게 함.
+* th:each로 반복하며 `${#numbers.sequence(startPage, endPage)}`를 통해 컨트롤러에서 모델에 추가한 startPage, endPage까지 숫자 범위를 설정한다.
+* 검색 시에 페이지를 누르면 검색이 초기화되는 것을 막기 위해 `th:href` url에 search 쿼리 파라미터 추가
+
+```java
+<!-- Search Bar -->
+<form class="d-flex" style="position: relative; top: 40px;" method="get" th:action="@{/}">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"              
+    id="search" name="search" th:value="${param.search}">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+```
+* 검색어를 입력할 경우 검색어가 url에 쿼리 파라미터로 붙어서 GET 방식으로 url이 요청된다. 
+* th:value="${param.search}"로 검색어가 검색창에 유지되도록 함.
 
 <br>
 

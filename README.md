@@ -86,7 +86,7 @@ private List<Board> boardList = new ArrayList<>();
 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 private List<Reply> replyList = new ArrayList<>();
 ```
-* User 도메인의 boardList와 replyList는 OneToMany를, Board와 Reply의 user에는 ManyToOne를 주어 양방향 매핑 
+* User 도메인의 boardList와 replyList는 OneToMany를, Board와 Reply의 user에는 ManyToOne 주어 양방향 매핑 
 * boardList와 replyList에는 CascadeType.ALL, orphanRemoval = true 를 주어 유저가 회원 탈퇴할 시 해당 유저가 작성한 게시글과 댓글이 모두 삭제됨
 
 <br>
@@ -106,7 +106,7 @@ public void delete(UserDeleteRequestDto userDeleteRequestDto) {
 ```
 * service에서 입력받은 비밀번호가 DB에 저장된 비밀번호와 일치할 경우 회원 탈퇴 진행. 📌 [service](https://github.com/ddukkung/xyab/blob/2edc61d129af72fca78667a45786f220ab6c6d70/src/main/java/community/xyab/service/UserService.java#L40)
   * `BCryptPasswordEncoder`의 `matches()` 메소드를 통해 입력받은 비밀번호를 인코딩해 비교
-  * `SecurityContextHolder.clearContext();`를 추가하여 로그아웃 처리
+  * `SecurityContextHolder.clearContext();`를 통해 SecurityContext를 제거
 
 <br>
 
@@ -153,7 +153,7 @@ public String index(Model model,
 ```
 * `th:classappend`를 사용해 조건에 맞을 경우 동적으로 클래스에 disable or active가 추가되게 함.
 * `th:each`로 반복하며 `${#numbers.sequence(startPage, endPage)}`를 통해 컨트롤러에서 모델에 추가한 startPage, endPage까지 숫자 범위를 설정한다.
-* 검색 시에 페이지를 누르면 검색이 초기화되는 것을 막기 위해 `th:href` url에 search 쿼리 파라미터 추가
+* 검색 시에 페이지를 누르면 검색이 초기화되는 것을 막기 위해 `th:href` 의 url에 search 쿼리 파라미터 추가
 
 <br>
 
